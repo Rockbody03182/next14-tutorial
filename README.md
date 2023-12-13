@@ -53,3 +53,8 @@ redirects은 source, destination 및 permanent 속성이 있는 객체를 포함
 **Rewrites** (URL변경되지 않음)
 Rewrites를 사용하면 들어오는 request 경로를 다른 destination 경로에 매핑할 수 있다.  
 Rewrites은 URL 프록시 역할을 하고 **destination** 경로를 mask하여 사용자가 사이트에서 위치를 변경하지 않은 것처럼 보이게 한다.반대로 redirects은 새 페이지로 reroute되고 URL 변경 사항을 표시한다.
+
+## 4. **Server Side Rendering**
+언제 getServerSideProps를 사용해야 하는가?  
+request time에 반드시 데이터를 fetch해와야 하는 페이지를 pre-render해야 하는 경우에만 getServerSideProps를 사용해야 한다.  
+
