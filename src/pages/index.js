@@ -1,27 +1,23 @@
-import { useEffect, useState } from "react";
+import Link from "next/link";
 import Seo from "../../components/Seo";
-
-// const API_KEY = "10923b261ba94d897ac6b81148314a3f";
+import { useRouter } from "next/router";
 
 export default function Home({results}){
-  const [movies, setMovies] = useState([]);
-
-  // useEffect(() => {
-  //   (async () => {
-
-  //     setMovies(results);
-  //     console.log(results);
-  //   })();
-  // }, []);
-
+  const router = useRouter();
+  const onClick = (id, title) =>{
+    router.push(`/movies/${title}/${id}`);
+  }
   return (
     <div className="container">
       <Seo title="Home"></Seo>
       {results?.map((movie) => (
-        <div className="movie" key={movie.id}>
+        <div onClick={()=>onClick(movie.id, movie.original_title)} className="movie" key={movie.id}>
           <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
-          <h4>{movie.original_title}</h4>
+          <Link href={`/movies/${movie.original_title}/${movie.id}`} >
+            <h4>{movie.original_title}</h4>
+          </Link>
         </div>
+
       ))}
       <style jsx>{`
         .container {
@@ -29,6 +25,9 @@ export default function Home({results}){
           grid-template-columns: 1fr 1fr;
           padding: 20px;
           gap: 20px;
+        }
+        .movie{
+          cursor: pointer;
         }
         .movie img {
           max-width: 100%;

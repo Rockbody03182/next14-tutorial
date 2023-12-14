@@ -55,6 +55,45 @@ Rewrites를 사용하면 들어오는 request 경로를 다른 destination 경�
 Rewrites은 URL 프록시 역할을 하고 **destination** 경로를 mask하여 사용자가 사이트에서 위치를 변경하지 않은 것처럼 보이게 한다.반대로 redirects은 새 페이지로 reroute되고 URL 변경 사항을 표시한다.
 
 ## 4. **Server Side Rendering**
-언제 getServerSideProps를 사용해야 하는가?  
-request time에 반드시 데이터를 fetch해와야 하는 페이지를 pre-render해야 하는 경우에만 getServerSideProps를 사용해야 한다.  
+**CSR 동작과정**
+1. 유저가 웹사이트에 방문하면, 브라우저가 서버에 콘텐츠를 요청한다.
+2. 이에 서버는 빈 뼈대만 있는 HTML을 응답으로 보내준다. 
+3. 브라우저가 연결된 JavaScript 링크를 통해 서버로부터 다시 JavaScript 파일을 다운로드한다. 
+4. JavaScript를 통해 동적으로 페이지를 만들어 브라우저에 띄워준다. 
 
+**SSR의 동작 과정**
+1. 유저가 웹사이트에 방문하면, 브라우저가 서버에 콘텐츠를 요청한다.
+2. 이에 서버는 페이지에 필요한 데이터를 즉시 얻어와 모두 삽입하고, CSS까지 모두 적용해 렌더링 준비를 마친 HTML과 JavaScript코드를 브라우저에 응답으로 전달한다. 
+3. 브라우저에서는 JavaScript코드를 다운로드하고 HTML에 JavaScript로직을 연결한다. 
+
+내가 만든 서비스는 어떤걸 써야할까?  
+
+✔️ **CSR**
+- 유저와 상호작용이 많다
+- 대부분이 고객의 개인정보로 이루어진 페이지들이라 검색엔진에 노출될 필요는 없다
+
+✔️ **SSR**
+- 회사 홈페이지여서 홍보나 상위노출이 필요하다
+- 누구에게나 항상 같은 내용을 보여준다
+- 업데이트가 빈번해 해당 페이지 데이터가 자주 바뀐다
+
+✔️ **SSG**
+- 회사 홈페이지여서 홍보나 상위노출이 필요하다
+- 누구에게나 항상 같은 내용을 보여준다
+- 업데이트를 거의 하지 않는다
+
+✔️ **Universal Rendering** (초기 렌더링으로는 CSR + 이후 SSR)
+- 사용자에 따라 페이지 내용이 달라진다
+- 빠른 interaction과 화면 깜빡임이 없어야 한다
+- SEO를 포기할 수 없어 상위노출이 되면 좋겠다
+
+## 5-1. **Dynamic Route**
+page에 대괄호([param])를 추가하여 Dynamic Route를 생성할 수 있다.    
+/movies/1, /movies/abc 등과 같은 모든 경로는 pages/movies/[id].js와 일치한다.  
+/movies/(parameter) 를 만드려면 movies라는 디렉토리에 [id].js 라는 파일을 만든다.
+
+## 5-2. **Catch All**
+대괄호 안에 세 개의 점(...)을 추가하여 모든 경로를 포착하도록 Dynamic Routes를 확장할 수 있다.  
+pages/movies/[...id].js는 /movies/1와 일치하지만 /movies/1/2, /movies/1/ab/cd 등과도 일치한다.  
+일치하는 매개변수는 페이지에 쿼리 매개변수로 전송되며 항상 배열이므로 /movies/a 경로에는 다음 쿼리 개체가 있다.
+ex) { "id": ["a"] }
